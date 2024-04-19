@@ -44,10 +44,3 @@ puedeEstarEnfermo(Perro) :-
     \+ (perro(lucia, Perro, _)),
     \+ estandarRacial(Perro).
 
-% Predicado para determinar si un perro se parece a su dueño
-sePareceASuDuenio(Humano, Perro) :-
-    humano(Humano, CaracteristicasHumano),
-    perro(_, Perro, CaracteristicasPerro),
-    forall(member(C, CaracteristicasHumano), member(C, CaracteristicasPerro)).
-
-
