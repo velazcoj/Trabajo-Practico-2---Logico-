@@ -1,0 +1,53 @@
+%beagle(nombre, altura, peso)
+%cocker(nombre, peso, altura, genero)
+%perro(duenio, perro, caracteristicas del perro)
+perro(lucia, beagle(kongo, 20, 15), [jugueton, carinioso, tonto]).
+perro(lucia, cocker(susi, 13, 38, hembra), [inteligente, bueno]).
+perro(gise, cocker(polo, 20, 41, macho), [malo, inteligente]).
+perro(homero,ayudanteDeSanta, [carinioso,tonto, vago]).
+gato(senioraDeLosGatos, flufy).
+gato(senioraDeLosGatos, michifuz).
+%humano(nombre, características)
+humano(homero, [tonto, vago]).
+humano(lucia, [carinioso, inteligente]).
+humano(gise, [inteligente, malo]).
+humano(ralph, [tonto, carinioso]).
+
+
+% Predicado para saber si un perro cumple con el estándar racial
+estandarRacial(beagle(_, Altura, _)) :-
+    Altura >= 33,
+    Altura =< 40.
+    
+estandarRacial(cocker(_, Peso, Altura, hembra)) :-
+    Altura >= 38,
+    Altura =< 39,
+    Peso >= 13,
+    Peso =< 15.
+
+estandarRacial(cocker(_, Peso, Altura, macho)) :-
+    Altura >= 39,
+    Altura =< 41,
+    Peso >= 13,
+    Peso =< 15.
+
+% Predicado para obtener todas las características de un perro o humano
+caracteristica(perro(_, _, Caracteristicas), X) :-
+    member(X, Caracteristicas).
+
+caracteristica(humano(_, Caracteristicas), X) :-
+    member(X, Caracteristicas).
+
+% Predicado para determinar si un perro puede estar enfermo
+puedeEstarEnfermo(Perro) :-
+    perro(_, Perro, _),
+    \+ (perro(lucia, Perro, _)),
+    \+ estandarRacial(Perro).
+
+% Predicado para determinar si un perro se parece a su dueño
+sePareceASuDuenio(Humano, Perro) :-
+    humano(Humano, CaracteristicasHumano),
+    perro(_, Perro, CaracteristicasPerro),
+    forall(member(C, CaracteristicasHumano), member(C, CaracteristicasPerro)).
+
+
