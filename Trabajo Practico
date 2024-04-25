@@ -90,6 +90,9 @@ sePareceASuDuenio(Humano,Perro):- humano(Humano,CaracteristicasHumano),
 %> puedeGanar(homero).
 %false.
 
+puedeGanar(Humano):- perro(Humano,Perro,_),
+    findall(Perro,(perro(Humano,Perro,_),estandarRacial(Perro)),PerrosConEstandarRacial),
+    length(PerrosConEstandarRacial,Cantidad), Cantidad >= 2.
 
 
 %6. Queremos verificar si todos los perros de una determinada raza tienen un peso dentro de cierto rango. Implementa un predicado que verifique si todos los perros de una raza específica cumplen con esta condición.
