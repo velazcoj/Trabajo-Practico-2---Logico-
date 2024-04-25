@@ -99,6 +99,7 @@ puedeGanar(Humano):- perro(Humano,Perro,_),
 %Nota: todos los predicados deben ser inversibles salvo el estandarRacial.
 
 
+
 todosConPesoEnRango(Raza, PesoMin, PesoMax) :-
     findall(Perro, (perro(_, Perro, _), raza(Perro, Raza)), PerrosDeRaza),
     todosConPesoEnRangoAux(PerrosDeRaza, PesoMin, PesoMax).
