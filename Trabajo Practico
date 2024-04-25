@@ -58,10 +58,13 @@ caracteristica(Humano, Caracteristica) :- humano(Humano, Caracteristicas),
 caracteristica(ayudanteDeSanta, Caracteristica) :- perro(_, ayudanteDeSanta, Caracteristicas), 
     member(Caracteristica, Caracteristicas).
 
-%3. Todos los perros se pueden enfermar antes de la competencia, pero sabemos, por estadística, que los perros de Lucía no se enferman ni tampoco aquellos que cumplan con el estándar racial. Así que debemos hacer el predicado que nos diga si un perro puede estar enfermo.
+%3. Todos los perros se pueden enfermar antes de la competencia, pero sabemos, por estadística, 
+%que los perros de Lucía no se enferman ni tampoco aquellos que cumplan con el estándar racial. 
+%Así que debemos hacer el predicado que nos diga si un perro puede estar enfermo.
 %> puedeEstarEnfermo(ayudanteDeSanta).
 %true.
-% Predicado para determinar si un perro puede estar enfermo
+
+puedeEstarEnfermo(Perro):- not(estandarRacial(Perro)), perro(Duenio,Perro,_), Duenio \= lucia.
 
 
 %4. Hay un dicho que dice que los perros se parecen a su dueño. Veamos si podemos saber qué perros se parecen a qué humanos. 
@@ -91,6 +94,3 @@ sePareceASuDuenio(Humano,Perro):- humano(Humano,CaracteristicasHumano),
 
 %6. Queremos verificar si todos los perros de una determinada raza tienen un peso dentro de cierto rango. Implementa un predicado que verifique si todos los perros de una raza específica cumplen con esta condición.
 %Nota: todos los predicados deben ser inversibles salvo el estandarRacial.
-
-
-
