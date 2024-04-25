@@ -97,3 +97,21 @@ puedeGanar(Humano):- perro(Humano,Perro,_),
 
 %6. Queremos verificar si todos los perros de una determinada raza tienen un peso dentro de cierto rango. Implementa un predicado que verifique si todos los perros de una raza específica cumplen con esta condición.
 %Nota: todos los predicados deben ser inversibles salvo el estandarRacial.
+
+
+todosConPesoEnRango(Raza, PesoMin, PesoMax) :-
+    findall(Perro, (perro(_, Perro, _), raza(Perro, Raza)), PerrosDeRaza),
+    todosConPesoEnRangoAux(PerrosDeRaza, PesoMin, PesoMax).
+
+todosConPesoEnRangoAux([], _, _).
+todosConPesoEnRangoAux([Perro|PerrosRestantes], PesoMin, PesoMax) :-
+    peso(Perro, Peso),
+    Peso >= PesoMin,
+    Peso =< PesoMax,
+    todosConPesoEnRangoAux(PerrosRestantes, PesoMin, PesoMax).
+
+raza(beagle(_, _, _), beagle).
+raza(cocker(_, _, _, _), cocker).
+
+peso(beagle(_, Peso, _), Peso).
+peso(cocker(_, Peso, _, _), Peso).
