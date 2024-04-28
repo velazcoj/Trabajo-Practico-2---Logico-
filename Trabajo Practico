@@ -49,13 +49,9 @@ estandarRacial(cocker(_, Peso, Altura, macho)) :-
 %X = vago
 
 % Predicado para obtener todas las características de un perro o humano
-caracteristica(beagle(Nombre, _, _), Caracteristica) :- perro(_, beagle(Nombre, _, _), Caracteristicas), 
-    member(Caracteristica, Caracteristicas).
-caracteristica(cocker(Nombre, _, _, _), Caracteristica) :- perro(_, cocker(Nombre, _, _, _), Caracteristicas), 
+caracteristica(Perro,Caracteristica) :- perro(_,Perro,Caracteristicas), 
     member(Caracteristica, Caracteristicas).
 caracteristica(Humano, Caracteristica) :- humano(Humano, Caracteristicas), 
-    member(Caracteristica, Caracteristicas).
-caracteristica(ayudanteDeSanta, Caracteristica) :- perro(_, ayudanteDeSanta, Caracteristicas), 
     member(Caracteristica, Caracteristicas).
 
 %3. Todos los perros se pueden enfermar antes de la competencia, pero sabemos, por estadística, 
@@ -64,7 +60,8 @@ caracteristica(ayudanteDeSanta, Caracteristica) :- perro(_, ayudanteDeSanta, Car
 %> puedeEstarEnfermo(ayudanteDeSanta).
 %true.
 
-puedeEstarEnfermo(Perro):- not(estandarRacial(Perro)), perro(Duenio,Perro,_), Duenio \= lucia.
+puedeEstarEnfermo(Perro):- perro(_,Perro,_),
+    not(estandarRacial(Perro)), perro(Duenio,Perro,_), Duenio \= lucia.
 
 
 %4. Hay un dicho que dice que los perros se parecen a su dueño. Veamos si podemos saber qué perros se parecen a qué humanos. 
@@ -90,7 +87,7 @@ sePareceASuDuenio(Humano,Perro):- humano(Humano,CaracteristicasHumano),
 %> puedeGanar(homero).
 %false.
 
-puedeGanar(Humano):- perro(Humano,Perro,_),
+puedeGanar(Humano):- perro(Humano,_,_),
     findall(Perro,(perro(Humano,Perro,_),estandarRacial(Perro)),PerrosConEstandarRacial),
     length(PerrosConEstandarRacial,Cantidad), Cantidad >= 2.
 
