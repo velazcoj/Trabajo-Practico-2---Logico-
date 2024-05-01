@@ -95,7 +95,7 @@ todosConPesoEnRango(Raza, PesoMin, PesoMax) :-
     findall(Perro, (perro(_, Perro, _), raza(Perro, Raza)), PerrosDeRaza),
     forall(member(Perro, PerrosDeRaza), pesoEnRango(Perro, PesoMin, PesoMax)).
 
-pesoEnRango(beagle(_, Peso, _), PesoMin, PesoMax):-
+pesoEnRango(beagle(_, _, Peso), PesoMin, PesoMax):-
     valorEntre(Peso,PesoMin,PesoMax).
 pesoEnRango(cocker(_, Peso, _, _), PesoMin, PesoMax):-
 	valorEntre(Peso,PesoMin,PesoMax).
