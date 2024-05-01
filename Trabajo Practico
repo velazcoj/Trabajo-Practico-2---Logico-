@@ -1,5 +1,5 @@
-Bienvenidos damas y caballeros a la 134ava edición de la competencia "El perrito más bonito". 
-Tenemos aquí la base de posibles participantes, que puede extenderse durante el momento de las inscripciones con diferentes razas de perros.
+%Bienvenidos damas y caballeros a la 134ava edición de la competencia "El perrito más bonito". 
+%Tenemos aquí la base de posibles participantes, que puede extenderse durante el momento de las inscripciones con diferentes razas de perros.
 %beagle(nombre, altura, peso)
 %cocker(nombre, peso, altura, genero)
 %perro(duenio, perro, caracteristicas del perro)
@@ -7,6 +7,7 @@ perro(lucia, beagle(kongo, 20, 15), [jugueton, carinioso, tonto]).
 perro(lucia, cocker(susi, 13, 38, hembra), [inteligente, bueno]).
 perro(gise, cocker(polo, 20, 41, macho), [malo, inteligente]).
 perro(homero,ayudanteDeSanta, [carinioso,tonto, vago]).
+
 gato(senioraDeLosGatos, flufy).
 gato(senioraDeLosGatos, michifuz).
 %humano(nombre, características)
@@ -24,19 +25,16 @@ humano(ralph, [tonto, carinioso]).
 %True %porque su altura es de 36 y está entre la altura necesaria.
 
 % 1) Predicado para saber si un perro cumple con el estándar racial
+valorEntre(Valor,Min,Max):- Valor >= Min, Valor =< Max.
+
 estandarRacial(beagle(_, Altura, _)) :-
-    Altura >= 33,
-    Altura =< 40.    
+    valorEntre(Altura, 33,40).
 estandarRacial(cocker(_, Peso, Altura, hembra)) :-
-    Altura >= 38,
-    Altura =< 39,
-    Peso >= 13,
-    Peso =< 15.
+    valorEntre(Altura, 38,39),
+    valorEntre(Peso, 13,15).
 estandarRacial(cocker(_, Peso, Altura, macho)) :-
-    Altura >= 39,
-    Altura =< 41,
-    Peso >= 13,
-    Peso =< 15.
+    valorEntre(Altura, 39,41),
+    valorEntre(Peso, 13,15).
 
 %2. Ahora necesitamos obtener cada una de las características indistintamente de si es un humano o un perro.
 %>caracteristica(beagle(A, _, _), X).
@@ -63,7 +61,6 @@ caracteristica(Humano, Caracteristica) :- humano(Humano, Caracteristicas),
 puedeEstarEnfermo(Perro):- perro(_,Perro,_),
     not(estandarRacial(Perro)), perro(Duenio,Perro,_), Duenio \= lucia.
 
-
 %4. Hay un dicho que dice que los perros se parecen a su dueño. Veamos si podemos saber qué perros se parecen a qué humanos. 
 %Un perro se parece a un humano si todos las características que tienen un humano, las tiene ese perro.
 %> sePareceASuDuenio(X, Y).
@@ -80,8 +77,6 @@ sePareceASuDuenio(Humano,Perro):- humano(Humano,CaracteristicasHumano),
     perro(_,Perro,CaracteristicasPerro),
     forall(member(Caracteristica,CaracteristicasHumano), member(Caracteristica,CaracteristicasPerro)).
 
-
-
 %5. Como toda competencia tiene un ganador, queremos ver el dueño de perros que más chances tiene de ganar. 
 %Para eso, debe tener al menos 2 perros que cumplan con el estándar racial.
 %> puedeGanar(homero).
@@ -91,25 +86,19 @@ puedeGanar(Humano):- perro(Humano,_,_),
     findall(Perro,(perro(Humano,Perro,_),estandarRacial(Perro)),PerrosConEstandarRacial),
     length(PerrosConEstandarRacial,Cantidad), Cantidad >= 2.
 
-
-%6. Queremos verificar si todos los perros de una determinada raza tienen un peso dentro de cierto rango. Implementa un predicado que verifique si todos los perros de una raza específica cumplen con esta condición.
+%6. Queremos verificar si todos los perros de una determinada raza tienen un peso dentro de cierto rango.
+%Implementa un predicado que verifique si todos los perros de una raza específica cumplen con esta condición.
 %Nota: todos los predicados deben ser inversibles salvo el estandarRacial.
-
-
+%perro(duenio, perro, caracteristicas del perro)
 
 todosConPesoEnRango(Raza, PesoMin, PesoMax) :-
     findall(Perro, (perro(_, Perro, _), raza(Perro, Raza)), PerrosDeRaza),
-    todosConPesoEnRangoAux(PerrosDeRaza, PesoMin, PesoMax).
+    forall(member(Perro, PerrosDeRaza), pesoEnRango(Perro, PesoMin, PesoMax)).
 
-todosConPesoEnRangoAux([], _, _).
-todosConPesoEnRangoAux([Perro|PerrosRestantes], PesoMin, PesoMax) :-
-    peso(Perro, Peso),
-    Peso >= PesoMin,
-    Peso =< PesoMax,
-    todosConPesoEnRangoAux(PerrosRestantes, PesoMin, PesoMax).
+pesoEnRango(beagle(_, Peso, _), PesoMin, PesoMax):-
+    valorEntre(Peso,PesoMin,PesoMax).
+pesoEnRango(cocker(_, Peso, _, _), PesoMin, PesoMax):-
+	valorEntre(Peso,PesoMin,PesoMax).
 
 raza(beagle(_, _, _), beagle).
 raza(cocker(_, _, _, _), cocker).
-
-peso(beagle(_, Peso, _), Peso).
-peso(cocker(_, Peso, _, _), Peso).
